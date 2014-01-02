@@ -4,7 +4,7 @@
  */
 
 var express = require('express');
-var routes = require('./routes');
+var articles = require('./routes/articles');
 var http = require('http');
 var path = require('path');
 
@@ -27,7 +27,12 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
+app.get('/article', articles.index);
+app.get('/article/:id', articles.view);
+app.get('/article/:id/edit', articles.edit);
+app.post('/article', articles.create);
+app.put('/article/:id', articles.update);
+app.delete('/article/:id', articles.delete);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
