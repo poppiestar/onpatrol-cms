@@ -1,0 +1,11 @@
+extends ../layout
+
+block content
+  h1 Show Article
+
+  p: a(href='/articles') Back to All Articles
+
+  h2= article.title
+
+  .content= article.text
+

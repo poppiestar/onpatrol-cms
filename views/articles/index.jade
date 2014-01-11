@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+  h1 All Articles
+
+  h2 Actions
+    p: a(href='/articles/new') Create
+
+  if articles.length > 0
+    ul
+      each article in articles
+        li: a(href='/articles/'+article.id)= article.title
+  else
+    p No articles found
+
+

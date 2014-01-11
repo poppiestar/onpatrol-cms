@@ -1,0 +1,16 @@
+extend ../layout
+
+block content
+  h1 New article
+  p This is where we create an article
+
+  form(action='/articles', method='post')
+    p
+      label Title
+      input(type='text', name='article_title')
+    p
+      label Text
+      textarea(name='article_text')
+    p
+      button Submit
+
