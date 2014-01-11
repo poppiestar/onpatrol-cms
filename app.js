@@ -4,9 +4,11 @@
  */
 
 var express = require('express');
-var articles = require('./routes/articles');
 var http = require('http');
 var path = require('path');
+var db = require('./models');
+var url = require('url');
+var Resource = require('express-resource');
 
 var app = express();
 
@@ -27,14 +29,22 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/article', articles.index);
-app.get('/article/:id', articles.view);
-app.get('/article/:id/edit', articles.edit);
-app.post('/article', articles.create);
-app.put('/article/:id', articles.update);
-app.delete('/article/:id', articles.delete);
+// catch-all for 404s
+app.use(function(req, res, next) {
+  res.send(404, 'custom 404!!');
+});
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+// REST routes for articles
+app.resource('articles', require('./resources/articles'));
+
+app.get('*', function(req, res, next) {
+  var parsed = url.parse(req.url);
+ 
+  if( parsed.path !== '/hello' ) {
+    next();
+  } else { 
+    res.send('catchall');
+    console.log(parsed);
+  }
 });
 
