@@ -9,7 +9,7 @@ block content
   if categories.length > 0
     ul
       each category in categories
-        li: a(href='/categories/'+category.id)= category.title
+        li: a(href='/categories/'+category.id)= category.name
   else
     p No categories found
 
