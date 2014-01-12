@@ -34,7 +34,7 @@ app.use(function(req, res, next) {
   res.send(404, 'custom 404!!');
 });
 
-// REST routes for articles
+// REST routes for articles and categories
 app.resource('articles', require('./resources/articles'));
 app.resource('categories', require('./resources/categories'));
 
@@ -42,7 +42,7 @@ app.get('*', function(req, res, next) {
   var parsed = url.parse(req.url);
   var chopped = req.url.substring(1);
  
-  if( app.settings.categories.indexOf(chopped) >= 0 ) {
+  if( app.get('categories').indexOf(chopped) >= 0 ) {
     res.send('found category, here is a page!');
   } else { 
     next();
