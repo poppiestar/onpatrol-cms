@@ -1,0 +1,13 @@
+extend ../layout
+
+block content
+  h1 New category
+  p This is where we create a category
+
+  form(action='/categories', method='post')
+    p
+      label Name
+      input(type='text', name='name')
+    p
+      button Submit
+

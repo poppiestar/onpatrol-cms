@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+  h1 All Categories
+
+  h2 Actions
+    p: a(href='/categories/new') Create
+
+  if categories.length > 0
+    ul
+      each category in categories
+        li: a(href='/categories/'+category.id)= category.title
+  else
+    p No categories found
+
+

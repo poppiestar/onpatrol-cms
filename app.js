@@ -36,6 +36,7 @@ app.use(function(req, res, next) {
 
 // REST routes for articles
 app.resource('articles', require('./resources/articles'));
+app.resource('categories', require('./resources/categories'));
 
 app.get('*', function(req, res, next) {
   var parsed = url.parse(req.url);
