@@ -40,12 +40,12 @@ app.resource('categories', require('./resources/categories'));
 
 app.get('*', function(req, res, next) {
   var parsed = url.parse(req.url);
+  var chopped = req.url.substring(1);
  
-  if( parsed.path !== '/hello' ) {
-    next();
+  if( app.settings.categories.indexOf(chopped) >= 0 ) {
+    res.send('found category, here is a page!');
   } else { 
-    res.send('catchall');
-    console.log(parsed);
+    next();
   }
 });
 

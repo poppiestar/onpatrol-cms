@@ -16,11 +16,16 @@ exports.new = function(req, res) {
 exports.create = function(req, res) {
   db.Category.create({ name: req.body.name })
     .success(function(category) {
-      res.redirect('/categories/' + category.getDataValue('id'));
+      db.Category.findAll()
+        .success(function(categories) {
+          var names = categories.map(function(category) { return category.name; });
+          req.app.set('categories', names);
+          res.redirect('/categories/' + category.getDataValue('id'));
+        });
     })
     .error(function(error) {
-      console.log('something fucked up creating: ', error);
-      res.send('something fucked up: ' + error);
+      console.log('something broke creating: ', error);
+      res.send('something broke: ' + error);
     });
 };
 
@@ -31,8 +36,8 @@ exports.show = function(req, res) {
       res.render('categories/show', { category: category });
     })
     .error(function(error) {
-      console.log('something fucked up showing: ', error);
-      res.send('something fucked up: ' + error);
+      console.log('something broke showing: ', error);
+      res.send('something broke: ' + error);
     });
 };
 
