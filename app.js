@@ -9,6 +9,7 @@ var path = require('path');
 var db = require('./models');
 var url = require('url');
 var Resource = require('express-resource');
+var urlHelper = require('./lib/helpers/urlhelper');
 
 var app = express();
 
@@ -39,11 +40,11 @@ app.resource('articles', require('./resources/articles'));
 app.resource('categories', require('./resources/categories'));
 
 app.get('*', function(req, res, next) {
-  var parsed = url.parse(req.url);
-  var chopped = req.url.substring(1);
+  var parsed = urlHelper.parse(req.url);
  
-  if( app.get('categories').indexOf(chopped) >= 0 ) {
-    res.send('found category, here is a page!');
+  if( app.get('categories').indexOf(parsed.category) >= 0 ) {
+    res.send('found category');
+
   } else { 
     next();
   }
