@@ -39,6 +39,9 @@ app.use(function(req, res, next) {
 app.resource('articles', require('./resources/articles'));
 app.resource('categories', require('./resources/categories'));
 
+// set default categories
+app.set('categories', []);
+
 app.get('*', function(req, res, next) {
   var parsed = urlHelper.parse(req.url);
  
