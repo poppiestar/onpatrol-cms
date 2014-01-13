@@ -1,4 +1,5 @@
 var db = require('../models');
+var marked = require('marked');
 
 // GET /articles
 exports.index = function(req, res) {
@@ -28,7 +29,7 @@ exports.create = function(req, res) {
 exports.show = function(req, res) {
   db.Article.find({ where: { id: req.params.article } })
     .success(function(article) {
-      res.render('articles/show', { article: article });
+      res.render('articles/show', { article: article, text: marked(article.getDataValue('text'))});
     })
     .error(function(error) {
       console.log('something fucked up showing: ', error);
