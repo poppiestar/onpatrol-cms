@@ -20,7 +20,17 @@ exports.create = function(req, res) {
         .success(function(categories) {
           var names = categories.map(function(category) { return category.name; });
           req.app.set('categories', names);
-          res.redirect('/categories/' + category.getDataValue('id'));
+
+          // create a default root article for the new category
+          db.Article.create({ title: 'root', text: 'This is a default article for this category' })
+            .success(function(article) {
+              article.setCategory(category);
+              res.redirect('/categories/' + category.getDataValue('id'));
+            })
+            .error(function(error) {
+              console.log(error);
+              res.send('There was an error creating the default article');
+            });
         });
     })
     .error(function(error) {
@@ -33,7 +43,9 @@ exports.create = function(req, res) {
 exports.show = function(req, res) {
   db.Category.find({ where: { id: req.params.category } })
     .success(function(category) {
-      res.render('categories/show', { category: category });
+      category.getArticles().success(function(associatedArticles) {
+        res.render('categories/show', { category: category, articles: associatedArticles });
+      });
     })
     .error(function(error) {
       console.log('something broke showing: ', error);
