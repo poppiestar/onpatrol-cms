@@ -46,7 +46,10 @@ app.get('*', function(req, res, next) {
   var parsed = urlHelper.parse(req.url);
  
   if( app.get('categories').indexOf(parsed.category) >= 0 ) {
-    res.send('found category');
+    db.Article.find({ where: { title: 'root' }})
+      .success(function(article) {
+        res.render('articles/show', {article: article});
+      });
 
   } else { 
     next();
