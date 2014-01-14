@@ -20,8 +20,8 @@ exports.create = function(req, res) {
       res.redirect('/articles/' + article.getDataValue('id'));
     })
     .error(function(error) {
-      console.log('something fucked up creating: ', error);
-      res.send('something fucked up: ' + error);
+      console.log('something messed up creating: ', error);
+      res.send('something messed up: ' + error);
     });
 };
 
@@ -32,8 +32,8 @@ exports.show = function(req, res) {
       res.render('articles/show', { article: article, text: marked(article.getDataValue('text'))});
     })
     .error(function(error) {
-      console.log('something fucked up showing: ', error);
-      res.send('something fucked up: ' + error);
+      console.log('something messed up showing: ', error);
+      res.send('something messed up: ' + error);
     });
 };
 
