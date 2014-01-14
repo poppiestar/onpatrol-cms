@@ -41,11 +41,9 @@ exports.create = function(req, res) {
 
 // GET /categories/:id
 exports.show = function(req, res) {
-  db.Category.find({ where: { id: req.params.category } })
+  db.Category.find({ where: { id: req.params.category }, include: [{model: db.Article, as: 'Articles' }] })
     .success(function(category) {
-      category.getArticles().success(function(associatedArticles) {
-        res.render('categories/show', { category: category, articles: associatedArticles });
-      });
+      res.render('categories/show', { category: category });
     })
     .error(function(error) {
       console.log('something broke showing: ', error);
