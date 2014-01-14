@@ -41,7 +41,7 @@ exports.create = function(req, res) {
 
 // GET /categories/:id
 exports.show = function(req, res) {
-  db.Category.find({ where: { id: req.params.category }, include: [{model: db.Article, as: 'Articles' }] })
+  db.Category.find({ where: { id: req.params.category }, include: [{model:db.Article}] })
     .success(function(category) {
       res.render('categories/show', { category: category });
     })
