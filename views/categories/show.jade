@@ -9,8 +9,8 @@ block content
 
   h3 Associated Articles
 
-  if articles.length > 0
+  if category.articles.length > 0
      ul
-      each article in articles
-        li= article.title
+      each article in category.articles
+        li: a(href='/'+category.name+'/'+article.title)= article.title
          
