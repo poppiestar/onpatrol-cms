@@ -10,6 +10,7 @@ var db = require('./models');
 var url = require('url');
 var Resource = require('express-resource');
 var urlHelper = require('./lib/helpers/urlhelper');
+var marked = require('marked');
 
 var app = express();
 
@@ -48,7 +49,7 @@ app.get('*', function(req, res, next) {
   if( app.get('categories').indexOf(parsed.category) >= 0 ) {
     db.Article.find({ where: { title: 'root' }})
       .success(function(article) {
-        res.render('articles/show', {article: article});
+        res.render('articles/show', {article: article, text: marked(article.getDataValue('text'))});
       });
 
   } else { 
