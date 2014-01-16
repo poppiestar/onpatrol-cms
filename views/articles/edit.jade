@@ -1,0 +1,18 @@
+extend ../layout
+
+block content
+  h1 Edit Article
+  p This is where we edit an article
+
+  form(action='/articles/' + article.id, method='post')
+    input(type='hidden', name='_method', value='PUT')
+    .row
+      label Title
+      input(type='text', name='title', value=article.title)
+    .row
+      label Text
+      textarea(name='text')
+        != article.text
+    .row
+      button Submit
+

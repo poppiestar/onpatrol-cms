@@ -39,12 +39,33 @@ exports.show = function(req, res) {
 
 // GET /articles/:id/edit
 exports.edit = function(req, res) {
-  res.send('EDIT WOO!');
+  db.Article.find({ where: { id: req.params.article } })
+    .success(function(article) {
+      res.render('articles/edit', { article: article });
+    })
+    .error(function(error) {
+      console.log('something messed up editing: ', error);
+      res.send('something messed up: ' + error);
+    });
 };
 
 // PUT /articles/:id
 exports.update = function(req, res) {
-  res.send('UPDATE WOO!');
+  console.log('article update function');
+  db.Article.find({ where: { id: req.params.article} })
+    .success(function(article) {
+      article.updateAttributes({
+        title: req.body.title,
+        text: req.body.text
+      })
+      .success(function() {
+        res.redirect('/articles/' + article.id);
+      });
+    })
+    .error(function(error) {
+      console.log('something messed up updating: ', error);
+      res.send('something messed up: ' + error);
+    });
 };
 
 // DELETE /articles/:id
