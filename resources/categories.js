@@ -43,7 +43,11 @@ exports.create = function(req, res) {
 exports.show = function(req, res) {
   db.Category.find({ where: { id: req.params.category }, include: [{model:db.Article}] })
     .success(function(category) {
-      res.render('categories/show', { category: category });
+      if( category ) {
+        res.render('categories/show', { category: category });
+      } else {
+        res.redirect('/categories');
+      }
     })
     .error(function(error) {
       console.log('something broke showing: ', error);
