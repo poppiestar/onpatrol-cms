@@ -47,9 +47,9 @@ app.get('*', function(req, res, next) {
   var parsed = urlHelper.parse(req.url);
  
   if( app.get('categories').indexOf(parsed.category) >= 0 ) {
-    db.Article.find({ where: { title: 'root' }})
+    db.Article.find({ where: { title: parsed.title }})
       .success(function(article) {
-        res.render('articles/show', {article: article, text: marked(article.getDataValue('text'))});
+        res.render('article', {categories: app.get('categories'), article: article, text: marked(article.getDataValue('text'))});
       });
 
   } else { 
