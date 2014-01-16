@@ -1,0 +1,17 @@
+extends ../layout
+
+block content
+  h1 Edit Category
+
+  p: a(href='/categories') Back to All Categories
+
+  p.warning Warning: changing a category name will change its URL!
+
+  form(action='/categories/' + category.id, method='post')
+    input(type='hidden', name='_method', value='PUT')
+    .row
+      label Name
+      input(type='text', name='name', value=category.name)
+    .row
+      button Submit
+

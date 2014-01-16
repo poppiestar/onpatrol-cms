@@ -57,12 +57,31 @@ exports.show = function(req, res) {
 
 // GET /categories/:id/edit
 exports.edit = function(req, res) {
-  res.send('EDIT WOO!');
+  db.Category.find({ where: { id: req.params.category } })
+    .success(function(category) {
+      res.render('categories/edit', { category: category });
+    })
+    .error(function(error) {
+      console.log('something messed up editing: ', error);
+      res.send('something messed up: ' + error);
+    });
 };
 
 // PUT /categories/:id
 exports.update = function(req, res) {
-  res.send('UPDATE WOO!');
+  db.Category.find({ where: { id: req.params.category } })
+    .success(function(category) {
+      category.updateAttributes({
+        name: req.body.name
+      })
+      .success(function() {
+        res.redirect('/categories/' + category.id);
+      });
+    })
+    .error(function(error) {
+      console.log('something messed up updating: ', error);
+      res.send('something messed up: ' + error);
+    });
 };
 
 // DELETE /categories/:id
