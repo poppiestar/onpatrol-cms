@@ -13,5 +13,8 @@ block content
       label Name
       input(type='text', name='name', value=category.name)
     .row
+      label Visible in Nav?
+      input(type='checkbox', checked=category.visible, name='visible')
+    .row
       button Submit
 

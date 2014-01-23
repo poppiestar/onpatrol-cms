@@ -5,9 +5,12 @@ block content
   p This is where we create a category
 
   form(action='/categories', method='post')
-    p
+    .row
       label Name
       input(type='text', name='name')
-    p
+    .row
+      label Visible in Nav?
+      input(type='checkbox', checked='checked', name='visible')
+    .row
       button Submit
 

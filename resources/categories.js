@@ -14,7 +14,7 @@ exports.new = function(req, res) {
 
 // POST /categories
 exports.create = function(req, res) {
-  db.Category.create({ name: req.body.name })
+  db.Category.create({ name: req.body.name, visible: !!req.body.visible })
     .success(function(category) {
       db.Category.findAll()
         .success(function(categories) {
@@ -72,7 +72,8 @@ exports.update = function(req, res) {
   db.Category.find({ where: { id: req.params.category } })
     .success(function(category) {
       category.updateAttributes({
-        name: req.body.name
+        name: req.body.name,
+        visible: !!req.body.visible
       })
       .success(function() {
         res.redirect('/categories/' + category.id);
