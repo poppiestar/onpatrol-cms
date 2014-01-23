@@ -14,25 +14,33 @@ exports.new = function(req, res) {
 
 // POST /categories
 exports.create = function(req, res) {
-  db.Category.create({ name: req.body.name, visible: !!req.body.visible })
-    .success(function(category) {
-      db.Category.findAll()
-        .success(function(categories) {
-          var names = categories.map(function(category) { return category.name; });
-          req.app.set('categories', names);
+  db.Category.create({
+    name: req.body.name,
+    visible: !!req.body.visible
+  })
+  .success(function(category) {
+    db.Category.findAll()
+      .success(function(categories) {
+        var names = categories.map(function(category) { return category.name; });
+        req.app.set('categories', names);
 
-          // create a default root article for the new category
-          db.Article.create({ title: 'root', text: 'This is a default article for this category' })
-            .success(function(article) {
-              article.setCategory(category);
+        // create a default root article for the new category
+        db.Article.create({
+          title: 'root',
+          text: 'This is a default article for this category'
+        })
+        .success(function(article) {
+          article.setCategory(category)
+            .complete(function(err) {
               res.redirect('/categories/' + category.getDataValue('id'));
-            })
-            .error(function(error) {
-              console.log(error);
-              res.send('There was an error creating the default article');
             });
+        })
+        .error(function(error) {
+          console.log(error);
+          res.send('There was an error creating the default article');
         });
-    })
+      });
+  })
     .error(function(error) {
       console.log('something broke creating: ', error);
       res.send('something broke: ' + error);

@@ -28,15 +28,20 @@ exports.new = function(req, res) {
 exports.create = function(req, res) {
   db.Category.find({ where: { id: req.body.article_category } })
     .success(function(category) {
-      db.Article.create({ title: req.body.article_title, text: req.body.article_text })
-        .success(function(article) {
-          article.setCategory(category);
-          res.redirect('/articles/' + article.getDataValue('id'));
-        })
-        .error(function(error) {
-          console.log('something messed up creating: ', error);
-          res.send('something messed up: ' + error);
-        });
+      db.Article.create({
+        title: req.body.article_title,
+        text: req.body.article_text
+      })
+      .success(function(article) {
+        article.setCategory(category)
+          .complete(function(err) {
+            res.redirect('/articles/' + article.getDataValue('id'));
+          });
+      })
+      .error(function(error) {
+        console.log('something messed up creating: ', error);
+        res.send('something messed up: ' + error);
+      });
     });
 };
 
