@@ -49,7 +49,16 @@ app.get('*', function(req, res, next) {
   if( app.get('categories').indexOf(parsed.category) >= 0 ) {
     db.Article.find({ where: { title: parsed.title }})
       .success(function(article) {
-        res.render('article', {categories: app.get('categories'), article: article, text: marked(article.getDataValue('text'))});
+        if( article ) {
+          res.render('article', {categories: app.get('categories'), article: article, text: marked(article.getDataValue('text'))});
+        } else {
+          // looking for an article that doesn't exist, 404 it
+          next();
+        }
+      })
+      .error(function(err) {
+        console.log('error finding article, 404 the sucker');
+        next();
       });
 
   } else { 
