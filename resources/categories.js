@@ -86,6 +86,20 @@ exports.update = function(req, res) {
 
 // DELETE /categories/:id
 exports.destroy = function(req, res) {
-  res.send('DELETE WOO!');
+  db.Category.find({ where: { id: req.params.category } })
+    .success(function(category) {
+      category.getArticles()
+        .success(function(articles) {
+          // can only delete a category if it has one article (which will be root)
+          if ( articles.length === 1 ) {
+            category.destroy()
+              .success(function() {
+                res.redirect('/categories');
+              });
+          } else {
+            res.redirect('/categories/'+category.getDataValue('id'));
+          } 
+        });
+    });
 };
 

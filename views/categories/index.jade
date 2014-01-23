@@ -9,7 +9,14 @@ block content
   if categories.length > 0
     ul
       each category in categories
-        li: a(href='/categories/'+category.id)= category.name
+        li
+          a(href='/categories/'+category.id)= category.name
+          .actions
+            a(href='/categories/'+category.id+'/edit') Edit
+            form(action='/categories/'+category.id, method='post')
+              input(type='hidden', name='_method', value='DELETE')
+              button Delete
+            
   else
     p No categories found
 
