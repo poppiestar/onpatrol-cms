@@ -4,7 +4,15 @@ var marked = require('marked');
 // GET /articles
 exports.index = function(req, res) {
   db.Article.findAll().success(function(articles) {
-    res.render('articles/index', { articles: articles });
+    switch (req.format) {
+      case 'json':
+        res.send(articles);
+        break;
+
+      default:
+        res.render('articles/index', { articles: articles });
+        break;
+    }
   });
 };
 
@@ -34,9 +42,17 @@ exports.create = function(req, res) {
 
 // GET /articles/:id
 exports.show = function(req, res) {
-  db.Article.find({ where: { id: req.params.article } })
+  db.Article.find({ where: { id: req.params.article }, include: [{ model: db.Category }] })
     .success(function(article) {
-      res.render('articles/show', { article: article, text: marked(article.getDataValue('text'))});
+      switch( req.format ) {
+        case 'json':
+          res.send(article);
+          break;
+
+       default:
+         res.render('articles/show', { article: article, text: marked(article.getDataValue('text'))});
+         break;
+      }
     })
     .error(function(error) {
       console.log('something messed up showing: ', error);
