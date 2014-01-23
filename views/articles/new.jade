@@ -12,5 +12,10 @@ block content
       label Text
       textarea(name='article_text')
     p
+      label Category
+      select(name='article_category')
+        each category in categories
+          option(value=category.id)= category.name
+    p
       button Submit
 
