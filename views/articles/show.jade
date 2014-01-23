@@ -5,5 +5,11 @@ block content
 
   p: a(href='/articles') Back to All Articles
 
+  p: a(href='/articles/'+article.id+'/edit') Edit
+
+  form(action='/articles/'+article.id, method='post')
+    input(type='hidden', name='_method', value='DELETE')
+    button Delete
+
   .content!= text
 
