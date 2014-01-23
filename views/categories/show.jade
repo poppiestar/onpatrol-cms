@@ -12,5 +12,11 @@ block content
   if category.articles.length > 0
      ul
       each article in category.articles
-        li: a(href='/'+category.name+'/'+article.title)= article.title
+        li
+          a(href='/'+category.name+'/'+article.title)= article.title
+          .actions
+            a(href='/articles/'+article.id+'/edit') Edit
+            form(action='/articles/'+article.id, method='post')
+              input(type='hidden', name='_method', value='DELETE')
+              button Delete
          

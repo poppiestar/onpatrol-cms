@@ -51,7 +51,6 @@ exports.edit = function(req, res) {
 
 // PUT /articles/:id
 exports.update = function(req, res) {
-  console.log('article update function');
   db.Article.find({ where: { id: req.params.article} })
     .success(function(article) {
       article.updateAttributes({
@@ -69,7 +68,25 @@ exports.update = function(req, res) {
 };
 
 // DELETE /articles/:id
-exports.destroy= function(req, res) {
-  res.send('DELETE WOO!');
+exports.destroy = function(req, res) {
+  db.Article.find({ where: { id: req.params.article } })
+    .success(function(article) {
+      article.getCategory()
+        .success(function(category) {
+          if (article.getDataValue('title') === 'root') {
+            // can't delete a root article
+            res.send('cannot delete root article');
+          } else {
+            article.destroy()
+              .success(function() {
+                if (category) {
+                  res.redirect('/categories/'+category.getDataValue('id'));
+                } else {
+                  res.redirect('/articles');
+                }
+              });
+          }
+        });
+    });
 };
 
