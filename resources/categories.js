@@ -2,7 +2,7 @@ var db = require('../models');
 
 // GET /categories
 exports.index = function(req, res) {
-  db.Category.findAll().success(function(categories) {
+  db.Category.findAll({ include: [{model: db.Article}]}).success(function(categories) {
     res.render('categories/index', { categories: categories });
   });
 };
@@ -86,20 +86,17 @@ exports.update = function(req, res) {
 
 // DELETE /categories/:id
 exports.destroy = function(req, res) {
-  db.Category.find({ where: { id: req.params.category } })
+  db.Category.find({ where: { id: req.params.category }, include: [{ model: db.Article }] })
     .success(function(category) {
-      category.getArticles()
-        .success(function(articles) {
-          // can only delete a category if it has one article (which will be root)
-          if ( articles.length === 1 ) {
-            category.destroy()
-              .success(function() {
-                res.redirect('/categories');
-              });
-          } else {
-            res.redirect('/categories/'+category.getDataValue('id'));
-          } 
-        });
-    });
+      // can only delete a category if it has one article (which will be root)
+      if ( category.articles.length === 1 ) {
+        category.destroy()
+          .success(function() {
+            res.redirect('/categories');
+          });
+      } else {
+        res.redirect('/categories/'+category.getDataValue('id'));
+      }
+  });
 };
 

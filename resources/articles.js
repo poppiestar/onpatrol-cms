@@ -10,18 +10,25 @@ exports.index = function(req, res) {
 
 // GET /articles/new
 exports.new = function(req, res) {
-  res.render('articles/new');
+  db.Category.findAll()
+    .success(function(categories) {
+      res.render('articles/new', { categories: categories });
+    });
 };
 
 // POST /articles
 exports.create = function(req, res) {
-  db.Article.create({ title: req.body.article_title, text: req.body.article_text })
-    .success(function(article) {
-      res.redirect('/articles/' + article.getDataValue('id'));
-    })
-    .error(function(error) {
-      console.log('something messed up creating: ', error);
-      res.send('something messed up: ' + error);
+  db.Category.find({ where: { id: req.body.article_category } })
+    .success(function(category) {
+      db.Article.create({ title: req.body.article_title, text: req.body.article_text })
+        .success(function(article) {
+          article.setCategory(category);
+          res.redirect('/articles/' + article.getDataValue('id'));
+        })
+        .error(function(error) {
+          console.log('something messed up creating: ', error);
+          res.send('something messed up: ' + error);
+        });
     });
 };
 

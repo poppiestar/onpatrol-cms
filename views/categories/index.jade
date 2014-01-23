@@ -11,6 +11,8 @@ block content
       each category in categories
         li
           a(href='/categories/'+category.id)= category.name
+          p Article Count:
+            = category.articles.length
           .actions
             a(href='/categories/'+category.id+'/edit') Edit
             form(action='/categories/'+category.id, method='post')
