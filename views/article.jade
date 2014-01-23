@@ -4,8 +4,7 @@ block content
   nav
     ul.nav
       each category in categories
-        li= category
-
+        li: a(href='/'+category)= category
 
   .content!= text
 
