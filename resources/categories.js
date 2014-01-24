@@ -15,8 +15,8 @@ exports.new = function(req, res) {
 // POST /categories
 exports.create = function(req, res) {
   db.Category.create({
-    name: req.body.name,
-    visible: !!req.body.visible
+    name: req.body.category.name,
+    visible: !!req.body.category.visible
   })
   .success(function(category) {
     db.Category.findAll()
@@ -32,7 +32,7 @@ exports.create = function(req, res) {
         .success(function(article) {
           article.setCategory(category)
             .complete(function(err) {
-              res.redirect('/categories/' + category.getDataValue('id'));
+              res.redirect('/admin/categories/' + category.getDataValue('id'));
             });
         })
         .error(function(error) {
@@ -54,7 +54,7 @@ exports.show = function(req, res) {
       if( category ) {
         res.render('categories/show', { category: category });
       } else {
-        res.redirect('/categories');
+        res.redirect('/admin/categories');
       }
     })
     .error(function(error) {
@@ -80,11 +80,11 @@ exports.update = function(req, res) {
   db.Category.find({ where: { id: req.params.category } })
     .success(function(category) {
       category.updateAttributes({
-        name: req.body.name,
-        visible: !!req.body.visible
+        name: req.body.category.name,
+        visible: !!req.body.category.visible
       })
       .success(function() {
-        res.redirect('/categories/' + category.id);
+        res.redirect('/admin/categories/' + category.id);
       });
     })
     .error(function(error) {
@@ -101,10 +101,10 @@ exports.destroy = function(req, res) {
       if ( category.articles.length === 1 ) {
         category.destroy()
           .success(function() {
-            res.redirect('/categories');
+            res.redirect('/admin/categories');
           });
       } else {
-        res.redirect('/categories/'+category.getDataValue('id'));
+        res.redirect('/admin/categories/'+category.getDataValue('id'));
       }
   });
 };

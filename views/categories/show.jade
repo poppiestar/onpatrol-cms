@@ -3,11 +3,9 @@ extends ../admin-layout
 block content
   h1 Show Category
 
-  p: a(href='/categories') Back to All Categories
+  p: a(href='/admin/categories/'+category.id+'/edit') Edit
 
-  p: a(href='/categories/'+category.id+'/edit') Edit
-
-  form(action='/categories/'+category.id, method='post')
+  form(action='/admin/categories/'+category.id, method='post')
     input(type='hidden', name='_method', value='DELETE')
     button Delete
 
@@ -16,7 +14,7 @@ block content
   h3 Associated Articles
 
   p
-    a(href='/articles/new') Create new article
+    a(href='/admin/articles/new') Create new article
 
   if category.articles.length > 0
      ul
@@ -24,8 +22,8 @@ block content
         li
           a(href='/'+category.name+'/'+article.title)= article.title
           .actions
-            a(href='/articles/'+article.id+'/edit') Edit
-            form(action='/articles/'+article.id, method='post')
+            a(href='/admin/articles/'+article.id+'/edit') Edit
+            form(action='/admin/articles/'+article.id, method='post')
               input(type='hidden', name='_method', value='DELETE')
               button Delete
          

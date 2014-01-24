@@ -4,13 +4,13 @@ block content
   h1 New category
   p This is where we create a category
 
-  form(action='/categories', method='post')
+  form(action='/admin/categories', method='post')
     .row
       label Name
-      input(type='text', name='name')
+      input(type='text', name='category[name]')
     .row
       label Visible in Nav?
-      input(type='checkbox', checked='checked', name='visible')
+      input(type='checkbox', checked='checked', name='category[visible]')
     .row
       button Submit
 

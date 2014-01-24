@@ -29,13 +29,13 @@ exports.create = function(req, res) {
   db.Category.find({ where: { id: req.body.article_category } })
     .success(function(category) {
       db.Article.create({
-        title: req.body.article_title,
-        text: req.body.article_text
+        title: req.body.article.title,
+        text: req.body.article.text
       })
       .success(function(article) {
         article.setCategory(category)
           .complete(function(err) {
-            res.redirect('/articles/' + article.getDataValue('id'));
+            res.redirect('/admin/articles/' + article.getDataValue('id'));
           });
       })
       .error(function(error) {
@@ -67,32 +67,44 @@ exports.show = function(req, res) {
 
 // GET /articles/:id/edit
 exports.edit = function(req, res) {
-  db.Article.find({ where: { id: req.params.article } })
-    .success(function(article) {
-      res.render('articles/edit', { article: article });
-    })
-    .error(function(error) {
-      console.log('something messed up editing: ', error);
-      res.send('something messed up: ' + error);
-    });
+  db.Category.findAll()
+    .success(function(categories) {
+      db.Article.find({ where: { id: req.params.article } })
+      .success(function(article) {
+        res.render('articles/edit', { categories: categories, article: article });
+      })
+      .error(function(error) {
+        console.log('something messed up editing: ', error);
+        res.send('something messed up: ' + error);
+      });
+  });
 };
 
 // PUT /articles/:id
 exports.update = function(req, res) {
-  db.Article.find({ where: { id: req.params.article} })
-    .success(function(article) {
-      article.updateAttributes({
-        title: req.body.title,
-        text: req.body.text
+  db.Category.find({ where: { id: req.params.article_category } })
+    .success(function(category) {
+      db.Article.find({ where: { id: req.params.article } })
+      .success(function(article) {
+        console.log('article before update: ', article);
+        article.updateAttributes({
+          title: req.body.article.title,
+          text: req.body.article.text
+        })
+        .success(function() {
+          console.log('article after update: ', article);
+          article.setCategory(category)
+            .complete(function(err) {
+              console.log('article after set category: ', article);
+              res.redirect('/admin/articles/' + article.id);
+            });
+        });
       })
-      .success(function() {
-        res.redirect('/articles/' + article.id);
+      .error(function(error) {
+        console.log('something messed up updating: ', error);
+        res.send('something messed up: ' + error);
       });
-    })
-    .error(function(error) {
-      console.log('something messed up updating: ', error);
-      res.send('something messed up: ' + error);
-    });
+  });
 };
 
 // DELETE /articles/:id
@@ -108,9 +120,9 @@ exports.destroy = function(req, res) {
             article.destroy()
               .success(function() {
                 if (category) {
-                  res.redirect('/categories/'+category.getDataValue('id'));
+                  res.redirect('/admin/categories/'+category.getDataValue('id'));
                 } else {
-                  res.redirect('/articles');
+                  res.redirect('/admin/articles');
                 }
               });
           }

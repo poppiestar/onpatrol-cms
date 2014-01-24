@@ -3,18 +3,18 @@ extends ../admin-layout
 block content
   h1 Edit Category
 
-  p: a(href='/categories') Back to All Categories
+  p: a(href='/admin/categories') Back to All Categories
 
   p.warning Warning: changing a category name will change its URL!
 
-  form(action='/categories/' + category.id, method='post')
+  form(action='/admin/categories/' + category.id, method='post')
     input(type='hidden', name='_method', value='PUT')
     .row
       label Name
-      input(type='text', name='name', value=category.name)
+      input(type='text', name='category[name]', value=category.name)
     .row
       label Visible in Nav?
-      input(type='checkbox', checked=category.visible, name='visible')
+      input(type='checkbox', checked=category.visible, name='category[visible]')
     .row
       button Submit
 

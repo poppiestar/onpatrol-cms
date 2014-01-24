@@ -37,8 +37,8 @@ app.use(function(req, res, next) {
 });
 
 // REST routes for articles and categories
-app.resource('articles', require('./resources/articles'));
-app.resource('categories', require('./resources/categories'));
+app.resource('admin/articles', require('./resources/articles'));
+app.resource('admin/categories', require('./resources/categories'));
 
 // set default categories
 app.set('categories', []);

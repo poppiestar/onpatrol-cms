@@ -3,11 +3,9 @@ extends ../admin-layout
 block content
   h1 Show Article
 
-  p: a(href='/articles') Back to All Articles
+  p: a(href='/admin/articles/'+article.id+'/edit') Edit
 
-  p: a(href='/articles/'+article.id+'/edit') Edit
-
-  form(action='/articles/'+article.id, method='post')
+  form(action='/admin/articles/'+article.id, method='post')
     input(type='hidden', name='_method', value='DELETE')
     button Delete
 

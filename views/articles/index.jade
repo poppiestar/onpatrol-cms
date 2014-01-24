@@ -4,16 +4,16 @@ block content
   h1 All Articles
 
   h2 Actions
-    p: a(href='/articles/new') Create
+    p: a(href='/admin/articles/new') Create
 
   if articles.length > 0
     ul
       each article in articles
         li
-          a(href='/articles/'+article.id)= article.title
+          a(href='/admin/articles/'+article.id)= article.title
           .actions
-            a(href='/articles/'+article.id+'/edit') Edit
-            form(action='/articles/'+article.id, method='post')
+            a(href='/admin/articles/'+article.id+'/edit') Edit
+            form(action='/admin/articles/'+article.id, method='post')
               input(type='hidden', name='_method', value='DELETE')
               button Delete
   else

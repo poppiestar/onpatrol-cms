@@ -4,18 +4,18 @@ block content
   h1 All Categories
 
   h2 Actions
-    p: a(href='/categories/new') Create
+    p: a(href='/admin/categories/new') Create
 
   if categories.length > 0
     ul
       each category in categories
         li
-          a(href='/categories/'+category.id)= category.name
+          a(href='/admin/categories/'+category.id)= category.name
           p Article Count:
             = category.articles.length
           .actions
-            a(href='/categories/'+category.id+'/edit') Edit
-            form(action='/categories/'+category.id, method='post')
+            a(href='/admin/categories/'+category.id+'/edit') Edit
+            form(action='/admin/categories/'+category.id, method='post')
               input(type='hidden', name='_method', value='DELETE')
               button Delete
             

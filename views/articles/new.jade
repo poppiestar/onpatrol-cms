@@ -4,18 +4,18 @@ block content
   h1 New article
   p This is where we create an article
 
-  form(action='/articles', method='post')
-    p
+  form(action='/admin/articles', method='post')
+    .row
       label Title
-      input(type='text', name='article_title')
-    p
+      input(type='text', name='article[title]')
+    .row
       label Text
-      textarea(name='article_text')
-    p
+      textarea(name='article[text]')
+    .row
       label Category
-      select(name='article_category')
+      select(name='article[category]')
         each category in categories
           option(value=category.id)= category.name
-    p
+    .row
       button Submit
 
