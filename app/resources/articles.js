@@ -65,7 +65,7 @@ exports.show = function(req, res) {
 exports.edit = function(req, res) {
   db.Category.findAll()
     .success(function(categories) {
-      db.Article.find({ where: { id: req.params.article } })
+      db.Article.find({ where: { id: req.params.article }, include: [{ model: db.Category }] })
       .success(function(article) {
         res.render('articles/edit', { categories: categories, article: article });
       })

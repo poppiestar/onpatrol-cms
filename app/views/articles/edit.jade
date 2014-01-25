@@ -18,7 +18,9 @@ block content
       label Category
       select.form-control(name='article[category]')
         each category in categories
-          option(value=category.id)= category.name
+          if article.category
+            - var article_category = article.category.id
+          option(value=category.id, selected=category.id==article_category)= category.name
     .form-group
       label Title
       input.form-control(type='text', name='article[title]', value=article.title)
