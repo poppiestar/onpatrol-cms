@@ -22,8 +22,8 @@ exports.create = function(req, res) {
   .success(function(category) {
     db.Category.findAll()
       .success(function(categories) {
-        var names = categories.map(function(category) { return category.name; });
-        req.app.set('categories', names);
+        // update the categories cache
+        req.app.set('categories', categories);
 
         // create a default root article for the new category
         db.Article.create({
@@ -85,7 +85,13 @@ exports.update = function(req, res) {
         visible: !!req.body.category.visible
       })
       .success(function() {
-        res.redirect('/admin/categories/' + category.id);
+        db.Category.findAll()
+          .success(function(categories) {
+            // update the category cache
+            req.app.set('categories', categories);
+
+            res.redirect('/admin/categories/' + category.id);
+          });
       });
     })
     .error(function(error) {
@@ -102,7 +108,13 @@ exports.destroy = function(req, res) {
       if ( category.articles.length === 1 ) {
         category.destroy()
           .success(function() {
-            res.redirect('/admin/categories');
+            db.Category.findAll()
+              .success(function(categories) {
+                // update the category cache
+                req.app.set('categories', categories);
+
+                res.redirect('/admin/categories');
+              });
           });
       } else {
         res.redirect('/admin/categories/'+category.getDataValue('id'));
