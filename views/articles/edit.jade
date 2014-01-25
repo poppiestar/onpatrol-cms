@@ -14,18 +14,19 @@ block content
     unless create
       input(type='hidden', name='_method', value='PUT')
 
-    .row
+    .form-group
       label Category
-      select(name='article[category]')
+      select.form-control(name='article[category]')
         each category in categories
           option(value=category.id)= category.name
-    .row
+    .form-group
       label Title
-      input(type='text', name='article[title]', value=article.title)
-    .row
+      input.form-control(type='text', name='article[title]', value=article.title)
+    .form-group
       label Text
-      textarea(name='article[text]')
+      textarea.form-control(name='article[text]')
         != article.text
-    .row
-      button Submit
+    .form-group
+      a.btn.btn-danger(href='/admin/articles') Cancel
+      button.btn.btn-primary Submit
 

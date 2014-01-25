@@ -1,0 +1,27 @@
+{
+  "name": "onpatrol-cms",
+  "version": "0.0.0",
+  "homepage": "https://github.com/poppiestar/onpatrol-cms",
+  "authors": [
+    "Drew Miller <drew@onpatrol.co>"
+  ],
+  "description": "A Ghost-inspired CMS used to run my home page",
+  "main": "app.js",
+  "keywords": [
+    "cms",
+    "onpatrol",
+    "home"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.0.3"
+  }
+}

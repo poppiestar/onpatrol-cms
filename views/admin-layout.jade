@@ -1,12 +1,21 @@
 doctype html
 html
   head
-    title Admin
+    meta(charset='utf-8')
+    link(rel='stylesheet', href='/bootstrap/dist/css/bootstrap.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
+    title Admin
   body
-    .sections
-      a(href='/admin/categories') Categories
-      a(href='/admin/articles') Articles
+    .container
+      .row
+        .col-xs-12
+          ul.nav.nav-tabs
+            li: a(href='/admin/categories') Categories
+            li: a(href='/admin/articles') Articles
 
-    block content
+      .row
+        .col-xs-12
+          block content
+
+    script(src='/jquery/jquery.js')
 

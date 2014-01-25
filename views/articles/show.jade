@@ -1,13 +1,21 @@
 extends ../admin-layout
 
 block content
-  h1 Show Article
+  h1 Article: #{article.title}
+    small (Category: #{article.category.name})
 
-  p: a(href='/admin/articles/'+article.id+'/edit') Edit
+  if article.title == 'root'
+    - var article_title = ''
+  else
+    - var article_title = '/' + article.title
 
-  form(action='/admin/articles/'+article.id, method='post')
-    input(type='hidden', name='_method', value='DELETE')
-    button Delete
+  ul.list-inline
+    li: a(href='/'+article.category.name+article_title) View
+    li: a(href='/admin/articles/'+article.id+'/edit') Edit
+    li
+      form(action='/admin/articles/'+article.id, method='post')
+        input(type='hidden', name='_method', value='DELETE')
+        button.btn.btn-danger.btn-xs Delete
 
   .content!= text
 

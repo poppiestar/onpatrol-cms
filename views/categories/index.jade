@@ -3,23 +3,38 @@ extends ../admin-layout
 block content
   h1 All Categories
 
-  h2 Actions
-    p: a(href='/admin/categories/new') Create
+  p: a(href='/admin/categories/new') New Category
 
   if categories.length > 0
-    ul
-      each category in categories
-        li
-          a(href='/admin/categories/'+category.id)= category.name
-          p Article Count:
-            = category.articles.length
-          .actions
-            a(href='/admin/categories/'+category.id+'/edit') Edit
-            form(action='/admin/categories/'+category.id, method='post')
-              input(type='hidden', name='_method', value='DELETE')
-              button Delete
-            
+    table.table.table-hover
+      thead
+        tr
+          th Name
+          th Category Articles
+          th Actions
+      tbody
+        each category in categories
+          tr 
+            td 
+              a(href='/admin/categories/'+category.id)= category.name
+            td
+              p Articles: #{category.articles.length} 
+              ul
+                each article in category.articles
+                  if article.title == 'root'
+                    - var article_title = ''
+                  else
+                    - var article_title = '/' + article.title
+                  li: a(href='/'+category.name + article_title)= article.title
+            td
+              ul.list-inline
+                li: a(href='/admin/articles/new') Create Article
+                li: a(href='/admin/categories/'+category.id+'/edit') Edit
+                li
+                  form(action='/admin/categories/'+category.id, method='post')
+                    input(type='hidden', name='_method', value='DELETE')
+                    button.btn.btn-danger.btn-xs Delete
+              
   else
     p No categories found
-
 

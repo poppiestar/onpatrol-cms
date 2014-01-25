@@ -3,20 +3,38 @@ extends ../admin-layout
 block content
   h1 All Articles
 
-  h2 Actions
-    p: a(href='/admin/articles/new') Create
+  p: a(href='/admin/articles/new') New Article
 
   if articles.length > 0
-    ul
-      each article in articles
-        li
-          a(href='/admin/articles/'+article.id)= article.title
-          .actions
-            a(href='/admin/articles/'+article.id+'/edit') Edit
-            form(action='/admin/articles/'+article.id, method='post')
-              input(type='hidden', name='_method', value='DELETE')
-              button Delete
+    table.table.table-hover
+      thead
+        tr
+          th Title
+          th Category
+          th Actions
+      tbody
+        each article in articles
+          tr
+            //- title
+            td
+              a(href='/admin/articles/'+article.id)= article.title
+            //- category
+            td
+              a(href='/admin/categories/'+article.category.id)= article.category.name
+            //- actions
+            td
+              if article.title === 'root'
+                - var article_title = ''
+              else
+                - var article_title = '/' + article.title
+
+              ul.list-inline
+                li: a(href='/'+article.category.name+article_title) View
+                li: a(href='/admin/articles/'+article.id+'/edit') Edit
+                li
+                  form(action='/admin/articles/'+article.id, method='post')
+                    input(type='hidden', name='_method', value='DELETE')
+                    button.btn.btn-danger.btn-xs Delete
   else
     p No articles found
-
 

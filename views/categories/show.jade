@@ -1,15 +1,15 @@
 extends ../admin-layout
 
 block content
-  h1 Show Category
+  h1 Category: #{category.name}
 
-  p: a(href='/admin/categories/'+category.id+'/edit') Edit
+  ul.list-inline
+    li: a(href='/admin/categories/'+category.id+'/edit') Edit
+    li
+      form(action='/admin/categories/'+category.id, method='post')
+        input(type='hidden', name='_method', value='DELETE')
+        button.btn.btn-danger.btn-xs Delete
 
-  form(action='/admin/categories/'+category.id, method='post')
-    input(type='hidden', name='_method', value='DELETE')
-    button Delete
-
-  h2= category.name
 
   h3 Associated Articles
 
@@ -17,13 +17,24 @@ block content
     a(href='/admin/articles/new') Create new article
 
   if category.articles.length > 0
-     ul
-      each article in category.articles
-        li
-          a(href='/'+category.name+'/'+article.title)= article.title
-          .actions
-            a(href='/admin/articles/'+article.id+'/edit') Edit
-            form(action='/admin/articles/'+article.id, method='post')
-              input(type='hidden', name='_method', value='DELETE')
-              button Delete
-         
+    table.table.table-hover
+      thead
+        tr
+          th Title
+          th Actions
+      tbody
+        each article in category.articles
+          tr
+            td 
+              a(href='/'+category.name+'/'+article.title)= article.title
+            td
+              ul.list-inline
+                li: a(href='/admin/articles/'+article.id) View
+                li: a(href='/admin/articles/'+article.id+'/edit') Edit
+                li
+                  form(action='/admin/articles/'+article.id, method='post')
+                    input(type='hidden', name='_method', value='DELETE')
+                    button.btn.btn-danger.btn-xs Delete
+  else
+    p No articles found
+

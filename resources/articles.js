@@ -3,7 +3,7 @@ var marked = require('marked');
 
 // GET /articles
 exports.index = function(req, res) {
-  db.Article.findAll().success(function(articles) {
+  db.Article.findAll({ include: [{ model: db.Category }]}).success(function(articles) {
     switch (req.format) {
       case 'json':
         res.send(articles);

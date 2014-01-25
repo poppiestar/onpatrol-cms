@@ -17,12 +17,14 @@ block content
   form(action=action, method='post')
     unless create
       input(type='hidden', name='_method', value='PUT')
-    .row
+    .form-group
       label Name
-      input(type='text', name='category[name]', value=category.name)
-    .row
-      label Visible in Nav?
-      input(type='checkbox', checked=category.visible, name='category[visible]')
-    .row
-      button Submit
+      input.form-control(type='text', name='category[name]', value=category.name)
+    .form-group
+      label
+        input(type='checkbox', checked=category.visible, name='category[visible]')
+        | Visible in Nav?
+    .form-group
+      a.btn.btn-danger(href='/admin/categories') Cancel
+      button.btn.btn-primary Submit
 
