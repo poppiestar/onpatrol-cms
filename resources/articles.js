@@ -20,7 +20,7 @@ exports.index = function(req, res) {
 exports.new = function(req, res) {
   db.Category.findAll()
     .success(function(categories) {
-      res.render('articles/new', { categories: categories });
+      res.render('articles/edit', { create: true, article: {}, categories: categories });
     });
 };
 

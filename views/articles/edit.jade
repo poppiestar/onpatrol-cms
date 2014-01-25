@@ -1,11 +1,19 @@
 extend ../admin-layout
 
 block content
-  h1 Edit Article
-  p This is where we edit an article
+  if create
+    - var title = 'Create'
+    - var action = '/admin/articles/'
+  else
+    - var title = 'Edit'
+    - var action = '/admin/articles/' + article.id
 
-  form(action='/admin/articles/' + article.id, method='post')
-    input(type='hidden', name='_method', value='PUT')
+  h1 #{title} Article
+
+  form(action=action, method='post')
+    unless create
+      input(type='hidden', name='_method', value='PUT')
+
     .row
       label Category
       select(name='article[category]')
