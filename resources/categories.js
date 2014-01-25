@@ -9,7 +9,8 @@ exports.index = function(req, res) {
 
 // GET /categories/new
 exports.new = function(req, res) {
-  res.render('categories/new');
+  var category = db.Category.build();
+  res.render('categories/edit', { category: category, create: true});
 };
 
 // POST /categories
