@@ -41,9 +41,6 @@ app.use(function(req, res, next) {
 app.resource('admin/articles', require('./app/resources/articles'));
 app.resource('admin/categories', require('./app/resources/categories'));
 
-// set default categories
-app.set('categories', []);
-
 app.get('*', function(req, res, next) {
   var parsed = urlHelper.parse(req.url);
  
@@ -74,9 +71,16 @@ db
     if (err) {
       throw err;
     } else {
-      http.createServer(app).listen(app.get('port'), function(){
-        console.log('Express server listening on port ' + app.get('port'));
-      });
+      // grab all the categories from the db before starting
+      db.Category.findAll()
+        .success(function(categories) {
+          app.set('categories', categories);
+
+          // start server
+          http.createServer(app).listen(app.get('port'), function(){
+            console.log('Express server listening on port ' + app.get('port'));
+          });
+        });
     }
   });
 
