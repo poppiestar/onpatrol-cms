@@ -26,23 +26,19 @@ exports.new = function(req, res) {
 
 // POST /articles
 exports.create = function(req, res) {
-  db.Category.find({ where: { id: req.body.article_category } })
-    .success(function(category) {
-      db.Article.create({
-        title: req.body.article.title,
-        text: req.body.article.text
-      })
-      .success(function(article) {
+  db.Article.create({
+    title: req.body.article.title,
+    text: req.body.article.text
+  })
+  .success(function(article) {
+    db.Category.find({ where: { id: req.body.article.category } })
+      .success(function(category) {
         article.setCategory(category)
           .complete(function(err) {
             res.redirect('/admin/articles/' + article.getDataValue('id'));
           });
-      })
-      .error(function(error) {
-        console.log('something messed up creating: ', error);
-        res.send('something messed up: ' + error);
       });
-    });
+  });
 };
 
 // GET /articles/:id
