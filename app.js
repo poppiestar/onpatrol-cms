@@ -6,7 +6,7 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
-var db = require('./models');
+var db = require('./app/models');
 var url = require('url');
 var Resource = require('express-resource');
 var urlHelper = require('./lib/helpers/urlhelper');
@@ -16,7 +16,7 @@ var app = express();
 
 // all environments
 app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'app/views'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
 app.use(express.logger('dev'));
@@ -38,8 +38,8 @@ app.use(function(req, res, next) {
 });
 
 // REST routes for articles and categories
-app.resource('admin/articles', require('./resources/articles'));
-app.resource('admin/categories', require('./resources/categories'));
+app.resource('admin/articles', require('./app/resources/articles'));
+app.resource('admin/categories', require('./app/resources/categories'));
 
 // set default categories
 app.set('categories', []);
