@@ -109,24 +109,21 @@ exports.update = function(req, res) {
 
 // DELETE /articles/:id
 exports.destroy = function(req, res) {
-  db.Article.find({ where: { id: req.params.article } })
+  db.Article.find({ where: { id: req.params.article }, include: [{ model: db.Category }] })
     .success(function(article) {
-      article.getCategory()
-        .success(function(category) {
-          if (article.getDataValue('title') === 'root') {
-            // can't delete a root article
-            res.send('cannot delete root article');
-          } else {
-            article.destroy()
-              .success(function() {
-                if (category) {
-                  res.redirect('/admin/categories/'+category.getDataValue('id'));
-                } else {
-                  res.redirect('/admin/articles');
-                }
-              });
-          }
-        });
+      if (article.getDataValue('title') === 'root') {
+        // can't delete a root article
+        res.send('cannot delete root article');
+      } else {
+        article.destroy()
+          .success(function() {
+            if (article.category) {
+              res.redirect('/admin/categories/'+article.category.getDataValue('id'));
+            } else {
+              res.redirect('/admin/articles');
+            }
+          });
+      }
     });
 };
 
