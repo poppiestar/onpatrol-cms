@@ -26,8 +26,7 @@ var fs = require('fs'),
       }
     });
 
-
-    db.Category.hasMany(db.Article, {as: 'Articles'});
+    db.Category.hasMany(db.Article);
     db.Article.belongsTo(db.Category);
 
     module.exports = lodash.extend({
