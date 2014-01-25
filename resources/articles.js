@@ -82,29 +82,23 @@ exports.edit = function(req, res) {
 
 // PUT /articles/:id
 exports.update = function(req, res) {
-  db.Category.find({ where: { id: req.params.article_category } })
-    .success(function(category) {
-      db.Article.find({ where: { id: req.params.article } })
-      .success(function(article) {
-        console.log('article before update: ', article);
-        article.updateAttributes({
-          title: req.body.article.title,
-          text: req.body.article.text
-        })
-        .success(function() {
-          console.log('article after update: ', article);
-          article.setCategory(category)
-            .complete(function(err) {
-              console.log('article after set category: ', article);
-              res.redirect('/admin/articles/' + article.id);
-            });
-        });
+  db.Article.find({ where: { id: req.params.article } })
+    .success(function(article) {
+      // update article instance
+      article.updateAttributes({
+        title: req.body.article.title,
+        text: req.body.article.text
       })
-      .error(function(error) {
-        console.log('something messed up updating: ', error);
-        res.send('something messed up: ' + error);
+      .success(function() {
+        db.Category.find({ where: { id: req.body.article.category } })
+          .success(function(category) {
+            article.setCategory(category)
+              .complete(function(err) {
+                res.redirect('/admin/articles/' + article.id);
+              });
+          });
       });
-  });
+    });
 };
 
 // DELETE /articles/:id
