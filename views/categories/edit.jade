@@ -1,14 +1,22 @@
 extends ../admin-layout
 
 block content
-  h1 Edit Category
+  
+  if create
+    - var title = 'Create'
+    - var action = '/admin/categories'
+  else
+    - var title = 'Edit'
+    - var action = '/admin/categories/' + category.id
 
-  p: a(href='/admin/categories') Back to All Categories
+  h1 #{title} Category
 
-  p.warning Warning: changing a category name will change its URL!
+  unless create
+    p.warning Warning: changing a category name will change its URL!
 
-  form(action='/admin/categories/' + category.id, method='post')
-    input(type='hidden', name='_method', value='PUT')
+  form(action=action, method='post')
+    unless create
+      input(type='hidden', name='_method', value='PUT')
     .row
       label Name
       input(type='text', name='category[name]', value=category.name)

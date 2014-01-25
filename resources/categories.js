@@ -9,7 +9,7 @@ exports.index = function(req, res) {
 
 // GET /categories/new
 exports.new = function(req, res) {
-  res.render('categories/new');
+  res.render('categories/edit', { category: {}, create: true });
 };
 
 // POST /categories
