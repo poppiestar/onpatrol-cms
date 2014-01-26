@@ -4,6 +4,12 @@ module.exports = function(sequelize, DataTypes) {
     text: DataTypes.TEXT,
     publishedAt: DataTypes.DATE,
     state: DataTypes.STRING
+  }, {
+    instanceMethods: {
+      getTitle: function() {
+        return ( this.title === 'root' ? '' : '/' + this.title );
+      }
+    }
   });
 
   return Article;

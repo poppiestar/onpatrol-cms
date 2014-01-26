@@ -10,7 +10,6 @@ block content
         input(type='hidden', name='_method', value='DELETE')
         button.btn.btn-danger.btn-xs Delete
 
-
   h3 Associated Articles
 
   p
@@ -26,7 +25,7 @@ block content
         each article in category.articles
           tr
             td 
-              a(href='/'+category.name+'/'+article.title)= article.title
+              a(href='/'+category.name + article.getTitle())= article.title
             td
               ul.list-inline
                 li: a(href='/admin/articles/'+article.id) View
