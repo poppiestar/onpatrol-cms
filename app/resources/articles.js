@@ -19,10 +19,15 @@ exports.index = function(req, res) {
 
 // GET /articles/new
 exports.new = function(req, res) {
-  Category.findAll()
-    .success(function(categories) {
-      res.render('articles/edit', { create: true, article: {}, categories: categories });
+  if ( req.app.get('categories').length === 0 ) {
+    res.redirect('/admin/categories');
+  } else {
+    res.render('articles/edit', {
+      create: true,
+      article: {},
+      categories: req.app.get('categories')
     });
+  }
 };
 
 // POST /articles
