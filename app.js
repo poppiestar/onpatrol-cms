@@ -43,9 +43,13 @@ app.resource('admin/categories', require('./app/resources/categories'));
 
 app.get('*', function(req, res, next) {
   var parsed = urlHelper.parse(req.url);
- 
-  if( app.get('categories').indexOf(parsed.category) >= 0 ) {
-    db.Article.find({ where: { title: parsed.title }})
+  var names = app.get('categories').map(function(category) { return category.getDataValue('name'); });
+  var index = names.indexOf(parsed.category);
+
+  if( index >= 0 ) {
+    var category_id = app.get('categories')[index].getDataValue('id');
+
+    db.Article.find({ where: { title: parsed.title }, include: [{ model: db.Category, where: { id: category_id } }]})
       .success(function(article) {
         if( article ) {
           res.render('article', {categories: app.get('categories'), article: article, text: marked(article.getDataValue('text'))});
@@ -58,7 +62,6 @@ app.get('*', function(req, res, next) {
         console.log('error finding article, 404 the sucker');
         next();
       });
-
   } else { 
     next();
   }
