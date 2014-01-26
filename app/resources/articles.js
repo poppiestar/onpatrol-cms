@@ -1,9 +1,10 @@
-var db = require('../models');
+var Article = require('../models').Article;
+var Category = require('../models').Category;
 var marked = require('marked');
 
 // GET /articles
 exports.index = function(req, res) {
-  db.Article.findAll({ include: [{ model: db.Category }]}).success(function(articles) {
+  Article.findAll({ include: [{ model: Category }]}).success(function(articles) {
     switch (req.format) {
       case 'json':
         res.send(articles);
@@ -18,7 +19,7 @@ exports.index = function(req, res) {
 
 // GET /articles/new
 exports.new = function(req, res) {
-  db.Category.findAll()
+  Category.findAll()
     .success(function(categories) {
       res.render('articles/edit', { create: true, article: {}, categories: categories });
     });
@@ -26,12 +27,12 @@ exports.new = function(req, res) {
 
 // POST /articles
 exports.create = function(req, res) {
-  db.Article.create({
+  Article.create({
     title: req.body.article.title,
     text: req.body.article.text
   })
   .success(function(article) {
-    db.Category.find({ where: { id: req.body.article.category } })
+    Category.find({ where: { id: req.body.article.category } })
       .success(function(category) {
         article.setCategory(category)
           .complete(function(err) {
@@ -43,7 +44,7 @@ exports.create = function(req, res) {
 
 // GET /articles/:id
 exports.show = function(req, res) {
-  db.Article.find({ where: { id: req.params.article }, include: [{ model: db.Category }] })
+  Article.find({ where: { id: req.params.article }, include: [{ model: Category }] })
     .success(function(article) {
       switch( req.format ) {
         case 'json':
@@ -63,9 +64,9 @@ exports.show = function(req, res) {
 
 // GET /articles/:id/edit
 exports.edit = function(req, res) {
-  db.Category.findAll()
+  Category.findAll()
     .success(function(categories) {
-      db.Article.find({ where: { id: req.params.article }, include: [{ model: db.Category }] })
+      Article.find({ where: { id: req.params.article } })
       .success(function(article) {
         res.render('articles/edit', { categories: categories, article: article });
       })
@@ -78,7 +79,7 @@ exports.edit = function(req, res) {
 
 // PUT /articles/:id
 exports.update = function(req, res) {
-  db.Article.find({ where: { id: req.params.article } })
+  Article.find({ where: { id: req.params.article } })
     .success(function(article) {
       // update article instance
       article.updateAttributes({
@@ -86,7 +87,7 @@ exports.update = function(req, res) {
         text: req.body.article.text
       })
       .success(function() {
-        db.Category.find({ where: { id: req.body.article.category } })
+        Category.find({ where: { id: req.body.article.category } })
           .success(function(category) {
             article.setCategory(category)
               .complete(function(err) {
@@ -99,7 +100,7 @@ exports.update = function(req, res) {
 
 // DELETE /articles/:id
 exports.destroy = function(req, res) {
-  db.Article.find({ where: { id: req.params.article }, include: [{ model: db.Category }] })
+  Article.find({ where: { id: req.params.article }, include: [{ model: Category }] })
     .success(function(article) {
       if (article.getDataValue('title') === 'root') {
         // can't delete a root article

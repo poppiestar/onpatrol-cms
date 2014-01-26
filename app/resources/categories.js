@@ -1,32 +1,33 @@
-var db = require('../models');
+var Category = require('../models').Category;
+var Article = require('../models').Article;
 
 // GET /categories
 exports.index = function(req, res) {
-  db.Category.findAll({ include: [{model: db.Article}]}).success(function(categories) {
+  Category.findAll({ include: [{model: Article}]}).success(function(categories) {
     res.render('categories/index', { categories: categories });
   });
 };
 
 // GET /categories/new
 exports.new = function(req, res) {
-  var category = db.Category.build();
+  var category = Category.build();
   res.render('categories/edit', { category: category, create: true});
 };
 
 // POST /categories
 exports.create = function(req, res) {
-  db.Category.create({
+  Category.create({
     name: req.body.category.name,
     visible: !!req.body.category.visible
   })
   .success(function(category) {
-    db.Category.findAll()
+    Category.findAll()
       .success(function(categories) {
         // update the categories cache
         req.app.set('categories', categories);
 
         // create a default root article for the new category
-        db.Article.create({
+        Article.create({
           title: 'root',
           text: 'This is a default article for this category'
         })
@@ -50,7 +51,7 @@ exports.create = function(req, res) {
 
 // GET /categories/:id
 exports.show = function(req, res) {
-  db.Category.find({ where: { id: req.params.category }, include: [{model:db.Article}] })
+  Category.find({ where: { id: req.params.category }, include: [{ model: Article }] })
     .success(function(category) {
       if( category ) {
         res.render('categories/show', { category: category });
@@ -66,7 +67,7 @@ exports.show = function(req, res) {
 
 // GET /categories/:id/edit
 exports.edit = function(req, res) {
-  db.Category.find({ where: { id: req.params.category } })
+  Category.find({ where: { id: req.params.category } })
     .success(function(category) {
       res.render('categories/edit', { category: category });
     })
@@ -78,14 +79,14 @@ exports.edit = function(req, res) {
 
 // PUT /categories/:id
 exports.update = function(req, res) {
-  db.Category.find({ where: { id: req.params.category } })
+  Category.find({ where: { id: req.params.category } })
     .success(function(category) {
       category.updateAttributes({
         name: req.body.category.name,
         visible: !!req.body.category.visible
       })
       .success(function() {
-        db.Category.findAll()
+        Category.findAll()
           .success(function(categories) {
             // update the category cache
             req.app.set('categories', categories);
@@ -102,13 +103,13 @@ exports.update = function(req, res) {
 
 // DELETE /categories/:id
 exports.destroy = function(req, res) {
-  db.Category.find({ where: { id: req.params.category }, include: [{ model: db.Article }] })
+  Category.find({ where: { id: req.params.category }, include: [{ model: Article }] })
     .success(function(category) {
       // can only delete a category if it has one article (which will be root)
       if ( category.articles.length === 1 ) {
         category.destroy()
           .success(function() {
-            db.Category.findAll()
+            Category.findAll()
               .success(function(categories) {
                 // update the category cache
                 req.app.set('categories', categories);
