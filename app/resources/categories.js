@@ -34,7 +34,7 @@ exports.create = function(req, res) {
         .success(function(article) {
           article.setCategory(category)
             .complete(function(err) {
-              res.redirect('/admin/categories/' + category.getDataValue('id'));
+              res.redirect('/admin/categories');
             });
         })
         .error(function(error) {
