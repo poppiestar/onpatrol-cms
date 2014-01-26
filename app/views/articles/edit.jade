@@ -20,7 +20,8 @@ block content
         each category in categories
           if article.category
             - var article_category = article.category.id
-          option(value=category.id, selected=category.id==article_category)= category.name
+          unless category.name === 'root'
+            option(value=category.id, selected=category.id==article_category)= category.name
     .form-group
       label Title
       input.form-control(type='text', name='article[title]', value=article.title)

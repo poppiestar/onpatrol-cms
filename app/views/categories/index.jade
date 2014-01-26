@@ -24,7 +24,8 @@ block content
                   li: a(href='/'+category.name + article.getTitle())= article.title
             td
               ul.list-inline
-                li: a(href='/admin/articles/new') Create Article
+                unless category.name === 'root'
+                  li: a(href='/admin/articles/new') Create Article
                 li: a(href='/admin/categories/'+category.id+'/edit') Edit
                 li
                   form(action='/admin/categories/'+category.id, method='post')
