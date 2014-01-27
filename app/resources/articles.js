@@ -27,15 +27,15 @@ exports.new = function(req, res) {
   if ( req.app.get('categories').length === 0 ) {
     res.redirect('/admin/categories');
   } else {
-    var category = _.find(req.app.get('categories'), function(category) {
-      return category.id === parseInt(req.query.category, 10);
-    });
-
     res.render('articles/edit', {
       create: true,
       article: {},
-      categories: req.app.get('categories'),
-      category: category
+      categories: _.filter(req.app.get('categories'), function(category) {
+        return category.name !== 'root';
+      }),
+      category: _.find(req.app.get('categories'), function(category) {
+        return category.id === parseInt(req.query.category, 10);
+      })
     });
   }
 };
@@ -93,7 +93,12 @@ exports.edit = function(req, res) {
         where: { id: req.params.article }
       })
       .success(function(article) {
-        res.render('articles/edit', { categories: categories, article: article });
+        res.render('articles/edit', {
+          categories: _.filter(req.app.get('categories'), function(category) {
+            return category.name !== 'root';
+          }),
+          article: article
+        });
       })
       .error(function(error) {
         console.log('something messed up editing: ', error);
