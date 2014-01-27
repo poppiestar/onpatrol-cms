@@ -49,10 +49,16 @@ app.get('*', function(req, res, next) {
   if( index >= 0 ) {
     var category_id = app.get('categories')[index].getDataValue('id');
 
-    db.Article.find({ where: { title: parsed.title }, include: [{ model: db.Category, where: { id: category_id } }]})
+    db.Article.find({
+      where: { title: parsed.title }, 
+      include: [{ model: db.Category, where: { id: category_id } }] })
       .success(function(article) {
         if( article ) {
-          res.render('article', {categories: app.get('categories'), article: article, text: marked(article.getDataValue('text'))});
+          res.render('article', {
+            categories: app.get('categories'),
+            article: article,
+            text: marked(article.getDataValue('text'))
+          });
         } else {
           // looking for an article that doesn't exist, 404 it
           next();
