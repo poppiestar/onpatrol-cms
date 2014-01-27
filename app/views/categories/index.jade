@@ -25,7 +25,7 @@ block content
             td
               ul.list-inline
                 unless category.name === 'root'
-                  li: a(href='/admin/articles/new') Create Article
+                  li: a(href='/admin/articles/new?category='+category.id) Create Article
                 li: a(href='/admin/categories/'+category.id+'/edit') Edit
                 li
                   form(action='/admin/categories/'+category.id, method='post')

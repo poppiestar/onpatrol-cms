@@ -14,7 +14,7 @@ block content
 
   unless category.name === 'root'
     p
-      a(href='/admin/articles/new') Create new article
+      a(href='/admin/articles/new?category='+category.id) Create new article
 
   if category.articles.length > 0
     table.table.table-hover

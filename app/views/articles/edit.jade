@@ -15,13 +15,17 @@ block content
       input(type='hidden', name='_method', value='PUT')
 
     .form-group
-      label Category
-      select.form-control(name='article[category]')
-        each category in categories
-          if article.category
-            - var article_category = article.category.id
-          unless category.name === 'root'
-            option(value=category.id, selected=category.id==article_category)= category.name
+      if category
+        label Category: #{category.name}
+        input(type='hidden', name='article[category]', value=category.id)
+      else
+        label Category
+        select.form-control(name='article[category]')
+          each cat in categories
+            if article.category
+              - var article_category = article.category.id
+            unless category.name === 'root'
+              option(value=cat.id, selected=cat.id==article_category)= cat.name
     .form-group
       label Title
       input.form-control(type='text', name='article[title]', value=article.title)
