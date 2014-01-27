@@ -11,6 +11,7 @@ var url = require('url');
 var Resource = require('express-resource');
 var urlHelper = require('./lib/helpers/urlhelper');
 var marked = require('marked');
+var _ = require('lodash');
 
 var app = express();
 
@@ -43,15 +44,14 @@ app.resource('admin/categories', require('./app/resources/categories'));
 
 app.get('*', function(req, res, next) {
   var parsed = urlHelper.parse(req.url);
-  var names = app.get('categories').map(function(category) { return category.getDataValue('name'); });
-  var index = names.indexOf(parsed.category);
+  var category = _.find(app.get('categories'), function(category) {
+    return category.name === parsed.category;
+  });
 
-  if( index >= 0 ) {
-    var category_id = app.get('categories')[index].getDataValue('id');
-
+  if( category ) {
     db.Article.find({
       where: { title: parsed.title }, 
-      include: [{ model: db.Category, where: { id: category_id } }] })
+      include: [{ model: db.Category, where: { id: category.id } }] })
       .success(function(article) {
         if( article ) {
           res.render('article', {
