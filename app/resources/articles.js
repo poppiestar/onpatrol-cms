@@ -1,6 +1,7 @@
 var Article = require('../models').Article;
 var Category = require('../models').Category;
 var marked = require('marked');
+var _ = require('lodash');
 
 // GET /articles
 exports.index = function(req, res) {
@@ -22,10 +23,15 @@ exports.new = function(req, res) {
   if ( req.app.get('categories').length === 0 ) {
     res.redirect('/admin/categories');
   } else {
+    var category = _.find(req.app.get('categories'), function(category) {
+      return category.id === parseInt(req.query.category, 10);
+    });
+
     res.render('articles/edit', {
       create: true,
       article: {},
-      categories: req.app.get('categories')
+      categories: req.app.get('categories'),
+      category: category
     });
   }
 };
