@@ -11,7 +11,7 @@ exports.index = function(req, res) {
 // GET /categories/new
 exports.new = function(req, res) {
   var category = Category.build();
-  res.render('categories/edit', { category: category, create: true});
+  res.render('categories/edit', { category: category, errors: {}, create: true});
 };
 
 // POST /categories

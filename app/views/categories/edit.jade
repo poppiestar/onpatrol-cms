@@ -9,6 +9,9 @@ block content
     - var title = 'Edit'
     - var action = '/admin/categories/' + category.id
 
+  if errors.length > 0
+    p.warning There were errors
+
   h1 #{title} Category
 
   unless create
@@ -17,9 +20,13 @@ block content
   form(action=action, method='post')
     unless create
       input(type='hidden', name='_method', value='PUT')
-    .form-group
-      label Name
+    .form-group(class=errors.name ? 'has-error' : null)
+      label.control-label Name
       input.form-control(type='text', name='category[name]', value=category.name)
+      if errors.name
+        p.help-block
+          span.glyphicon.glyphicon-remove
+          = errors.name
     .form-group
       label
         input(type='checkbox', checked=category.visible, name='category[visible]')
