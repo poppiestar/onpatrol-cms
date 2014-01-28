@@ -16,36 +16,33 @@ exports.new = function(req, res) {
 
 // POST /categories
 exports.create = function(req, res) {
-  Category.create({
+  var category = Category.build({
     name: req.body.category.name,
     visible: !!req.body.category.visible
-  })
-  .success(function(category) {
-    Category.findAll()
-      .success(function(categories) {
-        // update the categories cache
-        req.app.set('categories', categories);
+  });
 
-        // create a default root article for the new category
-        Article.create({
-          title: 'root',
-          text: 'This is a default article for this category'
-        })
-        .success(function(article) {
-          article.setCategory(category)
-            .complete(function(err) {
-              res.redirect('/admin/categories');
-            });
-        })
-        .error(function(error) {
-          console.log(error);
-          res.send('There was an error creating the default article');
-        });
+  category.save()
+    .error(function(errors) {
+      res.render('categories/edit', {
+        create: true,
+        errors: errors,
+        category: category
       });
-  })
-    .error(function(error) {
-      console.log('something broke creating: ', error);
-      res.send('something broke: ' + error);
+    })
+    .success(function(category) {
+      Article.create({
+        title: 'root',
+        text: 'This is the default article for category ' + category.name,
+        CategoryId: category.id
+      })
+      .success(function(article) {
+        // rebuild the category cache
+        Category.findAll()
+          .success(function(categories) {
+            req.app.set('categories', categories);
+            res.redirect('/admin/categories');
+          });
+      });
     });
 };
 
