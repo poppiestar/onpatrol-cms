@@ -83,18 +83,17 @@ exports.update = function(req, res) {
         visible: !!req.body.category.visible
       })
       .success(function() {
+        // rebuild the category cache
         Category.findAll()
           .success(function(categories) {
-            // update the category cache
             req.app.set('categories', categories);
-
             res.redirect('/admin/categories/' + category.id);
           });
       });
     })
     .error(function(error) {
-      console.log('something messed up updating: ', error);
-      res.send('something messed up: ' + error);
+      console.log('something messed up finding category: ', error);
+      res.send(500, '500 something messed up: ' + error);
     });
 };
 
