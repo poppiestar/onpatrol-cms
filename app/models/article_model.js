@@ -1,8 +1,15 @@
 module.exports = function(sequelize, DataTypes) {
   var Article = sequelize.define('Article', {
-    title: DataTypes.STRING,
+    title: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: true
+      }
+    },
     text: DataTypes.TEXT,
-    publishedAt: DataTypes.DATE,
+    publishedAt: {
+      type: DataTypes.DATE,
+    },
     state: DataTypes.STRING
   }, {
     instanceMethods: {

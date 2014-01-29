@@ -35,27 +35,54 @@ exports.new = function(req, res) {
       }),
       category: _.find(req.app.get('categories'), function(category) {
         return category.id === parseInt(req.query.category, 10);
-      })
+      }),
+      errors: {}
     });
   }
 };
 
 // POST /articles
 exports.create = function(req, res) {
-  Article.create({
+  var article = Article.build({
     title: req.body.article.title,
     text: req.body.article.text
+  });
+
+  Category.find({
+    where: { id: parseInt(req.body.article.category, 10) }
   })
-  .success(function(article) {
-    Category.find({
-        where: { id: req.body.article.category }
-      })
-      .success(function(category) {
-        article.setCategory(category)
-          .complete(function(err) {
-            res.redirect('/admin/articles/' + article.getDataValue('id'));
-          });
+  .error(function(errors) {
+    // unable to find category
+    res.render('articles/edit', {
+      article: article,
+      errors: { category: 'The selected category does not exist' },
+      categories: req.app.get('categories'),
+      create: true
+    });
+  })
+  .success(function(category) {
+    if( !category ) {
+       res.render('articles/edit', {
+        article: article,
+        errors: { category: 'The selected category does not exist' },
+        categories: req.app.get('categories'),
+        create: true
       });
+    } else {
+      article.setCategory(category)
+        .error(function(errors) {
+          res.render('articles/edit', {
+            article: article,
+            errors: errors,
+            categories: req.app.get('categories'),
+            create: true
+          });
+        })
+        .success(function(article) {
+          console.log(article);
+          res.redirect('/admin/articles/' + article.getDataValue('id'));
+        });
+    }
   });
 };
 
