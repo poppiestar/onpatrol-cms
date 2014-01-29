@@ -11,7 +11,7 @@ exports.index = function(req, res) {
 // GET /categories/new
 exports.new = function(req, res) {
   var category = Category.build();
-  res.render('categories/edit', { category: category, create: true});
+  res.render('categories/edit', { category: category, create: true });
 };
 
 // POST /categories
@@ -43,10 +43,10 @@ exports.create = function(req, res) {
         });
       });
   })
-    .error(function(error) {
-      console.log('something broke creating: ', error);
-      res.send('something broke: ' + error);
-    });
+  .error(function(error) {
+    console.log('something broke creating: ', error);
+    res.send('something broke: ' + error);
+  });
 };
 
 // GET /categories/:id
