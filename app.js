@@ -12,6 +12,7 @@ var Resource = require('express-resource');
 var urlHelper = require('./lib/helpers/urlhelper');
 var marked = require('marked');
 var _ = require('lodash');
+var SequelizeStore = require ('connect-session-sequelize')(express);
 
 var app = express();
 
@@ -26,6 +27,11 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'bower_components')));
+app.use(express.cookieParser());
+app.use(express.session({
+  store: new SequelizeStore({ db: db.sequelize }),
+  secret: 's3kr1t'
+}));
 app.use(app.router);
 
 // development only
