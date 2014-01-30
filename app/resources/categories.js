@@ -140,7 +140,8 @@ exports.update = function(req, res) {
     } else {
       category.updateAttributes({
         name: req.body.category.name,
-        visible: !!req.body.category.visible
+        visible: !!req.body.category.visible,
+        active: !!req.body.category.active
       })
       .success(function() {
         // rebuild the category cache
