@@ -51,6 +51,7 @@ exports.create = function(req, res) {
     Article.create({
       title: 'root',
       text: 'This is the default article for category ' + category.name,
+      state: 'published',
       CategoryId: category.id
     })
     .error(function(error) {
