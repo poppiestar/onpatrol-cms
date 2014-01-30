@@ -67,7 +67,8 @@ exports.new = function(req, res) {
 exports.create = function(req, res) {
   var article = Article.build({
     title: req.body.article.title,
-    text: req.body.article.text
+    text: req.body.article.text,
+    state: req.body.artcle.state
   });
 
   Category.find({
