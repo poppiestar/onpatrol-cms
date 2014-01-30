@@ -10,7 +10,11 @@ module.exports = function(sequelize, DataTypes) {
     publishedAt: {
       type: DataTypes.DATE,
     },
-    state: DataTypes.STRING
+    state: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'draft'
+    }
   }, {
     instanceMethods: {
       getTitle: function() {
