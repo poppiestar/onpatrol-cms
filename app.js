@@ -53,7 +53,7 @@ app.resource('admin/categories', require('./app/resources/categories'));
 app.get('*', function(req, res, next) {
   var parsed = urlHelper.parse(req.url);
   var category = _.find(app.get('categories'), function(category) {
-    return category.name === parsed.category;
+    return category.active && category.name === parsed.category;
   });
 
   if( category ) {
