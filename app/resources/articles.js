@@ -24,12 +24,21 @@ exports.index = function(req, res) {
 
 // GET /articles/new
 exports.new = function(req, res) {
+  var article = req.session.article ? req.session.article : {};
+
+  if ( req.session.article ) {
+    article = req.session.article;
+    delete req.session.article;
+  } else {
+    article = {};
+  }
+
   if ( req.app.get('categories').length === 0 ) {
     res.redirect('/admin/categories');
   } else {
     res.render('articles/edit', {
       create: true,
-      article: {},
+      article: article,
       categories: _.filter(req.app.get('categories'), function(category) {
         return category.name !== 'root';
       }),
