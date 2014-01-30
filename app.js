@@ -58,7 +58,7 @@ app.get('*', function(req, res, next) {
 
   if( category ) {
     db.Article.find({
-      where: { title: parsed.title }, 
+      where: { title: parsed.title, state: 'published' },
       include: [{ model: db.Category, where: { id: category.id } }] })
       .success(function(article) {
         if( article ) {
