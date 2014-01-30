@@ -69,19 +69,20 @@ exports.create = function(req, res) {
         create: true
       });
     } else {
-      article.setCategory(category)
-        .error(function(errors) {
-          res.render('articles/edit', {
-            article: article,
-            errors: errors,
-            categories: req.app.get('categories'),
-            create: true
-          });
-        })
-        .success(function(article) {
-          console.log(article);
-          res.redirect('/admin/articles/' + article.getDataValue('id'));
+      article.CategoryId = category.getDataValue('id');
+      article.save()
+      .error(function(errors) {
+        req.flash('alert', {
+          type: 'danger',
+          text: 'There was a problem saving your article'
         });
+        res.redirect('/admin/articles');
+      })
+      .success(function(article) {
+        req.flash('alert', 'Article was created successfully');
+        req.flash('alert_type', 'success');
+        res.redirect('/admin/articles/' + article.getDataValue('id'));
+      });
     }
   });
 };
