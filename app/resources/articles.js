@@ -175,7 +175,8 @@ exports.edit = function(req, res) {
 // PUT /articles/:id
 exports.update = function(req, res) {
   Article.find({
-      where: { id: req.params.article }
+      where: { id: req.params.article },
+      include: [{ model: Category }]
     })
     .error(function(error) {
       res.send(500, '500 There was a severe problem updating your article');
@@ -187,6 +188,8 @@ exports.update = function(req, res) {
         req.flash('alert_type', 'warning');
         res.redirect('/admin/articles');
       } else {
+        var rootArticle = article.title === 'root' ? true : false;
+
         // update article instance
         article.updateAttributes({
           title: req.body.article.title,
@@ -194,7 +197,22 @@ exports.update = function(req, res) {
           CategoryId: parseInt(req.body.article.category, 10)
         })
         .success(function() {
-          res.redirect('/admin/articles/' + article.id);
+          if( rootArticle && article.title !== 'root' ) {
+            // article is no longer category root article, set category inactive
+            Category.find({
+              where: { id: article.category.id }
+            })
+            .success(function(category) {
+              category.updateAttributes({
+                active: false
+              })
+              .success(function() {
+                req.flash('alert', 'Category \'' + article.category.name + '\' no longer has a root article, it has been set inactive');
+                req.flash('alert_type', 'warning');
+                res.redirect('/admin/articles/' + article.id);
+              });
+            });
+          }
         });
       }
     });
