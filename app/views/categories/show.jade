@@ -3,6 +3,8 @@ extends ../admin-layout
 block content
   h1 Category: #{category.name}
 
+  p Active: #{category.active ? 'Yes' : 'No'}
+
   ul.list-inline
     li: a(href='/admin/categories/'+category.id+'/edit') Edit
     li
