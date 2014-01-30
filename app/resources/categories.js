@@ -35,7 +35,8 @@ exports.new = function(req, res) {
 exports.create = function(req, res) {
   var category = Category.build({
     name: req.body.category.name,
-    visible: !!req.body.category.visible
+    visible: !!req.body.category.visible,
+    active: !!req.body.category.active
   });
 
   category.save()
