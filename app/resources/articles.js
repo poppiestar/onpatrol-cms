@@ -33,7 +33,7 @@ exports.new = function(req, res) {
     article = req.session.article;
     delete req.session.article;
   } else {
-    article = {};
+    article = Article.build();
   }
   
   if( req.session.errors ) {
