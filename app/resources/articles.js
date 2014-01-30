@@ -132,7 +132,7 @@ exports.show = function(req, res) {
             req.flash('alert_type', 'warning');
             res.redirect('/admin/articles');
           } else {
-             res.render('articles/show', {
+            res.render('articles/show', {
               article: article,
               text: marked(article.getDataValue('text'))
             });
@@ -183,7 +183,7 @@ exports.update = function(req, res) {
     .success(function(article) {
       if( !article ) {
         // redirect back to index page with a warning
-        req.flash('alert', 'Article could not be found');
+        req.flash('alert', 'The requested article could not be found');
         req.flash('alert_type', 'warning');
         res.redirect('/admin/articles');
       } else {
