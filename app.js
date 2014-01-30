@@ -13,6 +13,7 @@ var urlHelper = require('./lib/helpers/urlhelper');
 var marked = require('marked');
 var _ = require('lodash');
 var SequelizeStore = require ('connect-session-sequelize')(express);
+var flash = require('express-flash');
 
 var app = express();
 
@@ -32,6 +33,7 @@ app.use(express.session({
   store: new SequelizeStore({ db: db.sequelize }),
   secret: 's3kr1t'
 }));
+app.use(flash());
 app.use(app.router);
 
 // development only
