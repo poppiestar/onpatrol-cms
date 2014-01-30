@@ -11,6 +11,7 @@ block content
         tr
           th Title
           th Category
+          th Published State
           th Actions
       tbody
         each article in articles
@@ -21,6 +22,8 @@ block content
             //- category
             td
               a(href='/admin/categories/'+article.category.id)= article.category.name
+            //- published state
+            td= article.state
             //- actions
             td
               ul.list-inline
