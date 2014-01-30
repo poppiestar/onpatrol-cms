@@ -32,6 +32,10 @@ block content
         input(type='checkbox', checked=category.visible, name='category[visible]')
         | Visible in Nav?
     .form-group
+      label
+        input(type='checkbox', checked=category.active, name='category[active]')
+        | Active
+    .form-group
       a.btn.btn-danger(href='/admin/categories') Cancel
       button.btn.btn-primary Save
 
