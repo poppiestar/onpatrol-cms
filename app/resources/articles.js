@@ -195,6 +195,7 @@ exports.update = function(req, res) {
         article.updateAttributes({
           title: req.body.article.title,
           text: req.body.article.text,
+          state: req.body.article.state,
           CategoryId: parseInt(req.body.article.category, 10)
         })
         .success(function() {
