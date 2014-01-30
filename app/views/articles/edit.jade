@@ -36,6 +36,11 @@ block content
       if errors.title
         p.help-block A title needs to exist
     .form-group
+      label.control-label State
+      select.form-control(name='article[state]')
+        each state in ['draft', 'published', 'withdrawn']
+          option(value=state, selected=(article.state==state))= state
+    .form-group
       label.control-label Text
       textarea.form-control(name='article[text]')
         != article.text
