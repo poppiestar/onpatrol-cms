@@ -55,6 +55,9 @@ app.get('*', function(req, res, next) {
   var category = _.find(app.get('categories'), function(category) {
     return category.active && category.name === parsed.category;
   });
+  var categories = _.filter(app.get('categories'), function(category) {
+    return category.active && category.visible;
+  });
 
   if( category ) {
     db.Article.find({
@@ -63,7 +66,7 @@ app.get('*', function(req, res, next) {
       .success(function(article) {
         if( article ) {
           res.render('article', {
-            categories: app.get('categories'),
+            categories: categories,
             article: article,
             text: marked(article.getDataValue('text'))
           });
