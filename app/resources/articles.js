@@ -199,21 +199,25 @@ exports.update = function(req, res) {
           CategoryId: parseInt(req.body.article.category, 10)
         })
         .success(function() {
-          if( rootArticle && article.title !== 'root' ) {
-            // article is no longer category root article, set category inactive
-            Category.find({
-              where: { id: article.category.id }
-            })
-            .success(function(category) {
-              category.updateAttributes({
-                active: false
+          if( !rootArticle ) {
+            res.redirect('/admin/articles/' + article.id);
+          } else {
+            if( article.title !== 'root' || article.state != 'published' ) {
+              // article is no longer category root article, set category inactive
+              Category.find({
+                where: { id: article.category.id }
               })
-              .success(function() {
-                req.flash('alert', 'Category \'' + article.category.name + '\' no longer has a root article, it has been set inactive');
-                req.flash('alert_type', 'warning');
-                res.redirect('/admin/articles/' + article.id);
+              .success(function(category) {
+                category.updateAttributes({
+                  active: false
+                })
+                .success(function() {
+                  req.flash('alert', 'Category \'' + article.category.name + '\' no longer has an active root article, it has been set inactive');
+                  req.flash('alert_type', 'warning');
+                  res.redirect('/admin/articles/' + article.id);
+                });
               });
-            });
+            }
           }
         });
       }
