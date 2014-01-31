@@ -169,12 +169,12 @@ exports.update = function(req, res) {
               })
               .success(function() {
                 req.flash('alert', 'Category has been re-activated, category root article has been published');
-                req.flash('alert_type', 'info');
+                req.flash('alert_type', 'success');
                 res.redirect('/admin/categories/' + category.id);
               });
             } else {
-              req.flash('alert', 'Category has been re-activated, but category root article was already published');
-              req.flash('alert_type', 'info');
+              req.flash('alert', 'Category has been re-activated');
+              req.flash('alert_type', 'success');
               res.redirect('/admin/categories/' + category.id);
             }
           }
