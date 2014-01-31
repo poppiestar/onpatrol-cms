@@ -175,52 +175,53 @@ exports.edit = function(req, res) {
 // PUT /articles/:id
 exports.update = function(req, res) {
   Article.find({
-      where: { id: req.params.article },
-      include: [{ model: Category }]
-    })
-    .error(function(error) {
-      res.send(500, '500 There was a severe problem updating your article');
-    })
-    .success(function(article) {
-      if( !article ) {
-        // redirect back to index page with a warning
-        req.flash('alert', 'The requested article could not be found');
-        req.flash('alert_type', 'warning');
-        res.redirect('/admin/articles');
-      } else {
-        var rootArticle = article.title === 'root' ? true : false;
+    where: { id: req.params.article },
+    include: [{ model: Category }]
+  })
+  .error(function(error) {
+    res.send(500, '500 There was a severe problem updating your article');
+  })
+  .success(function(article) {
+    if( !article ) {
+      // redirect back to index page with a warning
+      req.flash('alert', 'The requested article could not be found');
+      req.flash('alert_type', 'warning');
+      res.redirect('/admin/articles');
+    } else {
+      var rootArticle = article.title === 'root' ? true : false;
 
-        // update article instance
-        article.updateAttributes({
-          title: req.body.article.title,
-          text: req.body.article.text,
-          state: req.body.article.state,
-          CategoryId: parseInt(req.body.article.category, 10)
-        })
-        .success(function() {
-          if( !rootArticle ) {
-            res.redirect('/admin/articles/' + article.id);
-          } else {
-            if( article.title !== 'root' || article.state != 'published' ) {
-              // article is no longer category root article, set category inactive
-              Category.find({
-                where: { id: article.category.id }
+      // update article instance
+      article.updateAttributes({
+        title: req.body.article.title,
+        text: req.body.article.text,
+        state: req.body.article.state,
+        CategoryId: parseInt(req.body.article.category, 10)
+      })
+      .success(function() {
+        if( !rootArticle ) {
+          res.redirect('/admin/articles/' + article.id);
+        } else {
+          // check if title is no longer root or if no longer published
+          if( article.title !== 'root' || article.state != 'published' ) {
+            // article is no longer category root article, set category inactive
+            if( !article.category.active ) {
+              // category is already inactive, don't bother setting it inactive
+              res.redirect('/admin/articles/' + article.id);
+            } else {
+              article.category.updateAttributes({
+                active: false
               })
-              .success(function(category) {
-                category.updateAttributes({
-                  active: false
-                })
-                .success(function() {
-                  req.flash('alert', 'Category \'' + article.category.name + '\' no longer has an active root article, it has been set inactive');
-                  req.flash('alert_type', 'warning');
-                  res.redirect('/admin/articles/' + article.id);
-                });
+              .success(function() {
+                req.flash('alert', 'Category \'' + article.category.name + '\' no longer has an active root article, it has been set inactive');
+                req.flash('alert_type', 'warning');
+                res.redirect('/admin/articles/' + article.id);
               });
             }
           }
-        });
-      }
-    });
+        }
+      });
+    }
+  });
 };
 
 // DELETE /articles/:id
