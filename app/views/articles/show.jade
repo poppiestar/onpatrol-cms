@@ -15,6 +15,11 @@ block content
     li: a(href='/'+article.category.name+article_title) View
     li: a(href='/admin/articles/'+article.id+'/edit') Edit
     li
+      form(action='/admin/articles/' + article.id, method='post')
+        input(type='hidden', name='_method', value='PUT')
+        input(type='hidden', name='article[state]', value=(article.state !== 'published' ? 'published' : 'withdrawn'))
+        button.btn.btn-primary.btn-xs= (article.state !== 'published' ? 'Publish' : 'Withdraw')
+    li
       form(action='/admin/articles/'+article.id, method='post')
         input(type='hidden', name='_method', value='DELETE')
         button.btn.btn-danger.btn-xs Delete
