@@ -192,10 +192,10 @@ exports.update = function(req, res) {
 
       // update article instance
       article.updateAttributes({
-        title: req.body.article.title,
-        text: req.body.article.text,
-        state: req.body.article.state,
-        CategoryId: parseInt(req.body.article.category, 10)
+        title: req.body.article.title || article.title,
+        text: req.body.article.text || article.text,
+        state: req.body.article.state || article.state,
+        CategoryId: parseInt(req.body.article.category, 10) || article.CategoryId
       })
       .success(function() {
         if( !rootArticle ) {
