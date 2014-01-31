@@ -124,7 +124,11 @@ exports.edit = function(req, res) {
 // PUT /categories/:id
 exports.update = function(req, res) {
   Category.find({
-    where: { id: parseInt(req.params.category, 10) }
+    where: { id: parseInt(req.params.category, 10) },
+    include: [{
+      model: Article,
+      where: { title: 'root' }
+    }]
   })
   .error(function(error) {
     // redirect back to categories index with warning
@@ -139,6 +143,9 @@ exports.update = function(req, res) {
       req.flash('alert_type', 'warning');
       res.redirect('/admin/categories');
     } else {
+      // note whether the category is changing active state
+      var activatingCategory = !category.active && !!req.body.category.active; 
+
       category.updateAttributes({
         name: req.body.category.name,
         visible: !!req.body.category.visible,
@@ -149,7 +156,28 @@ exports.update = function(req, res) {
         Category.findAll()
         .success(function(categories) {
           req.app.set('categories', categories);
-          res.redirect('/admin/categories/' + category.id);
+
+          if( !activatingCategory ) {
+            res.redirect('/admin/categories/' + category.id);
+          } else {
+            // category has been made active, publish its root article if necessary
+            var rootArticle = category.articles[0];
+
+            if( rootArticle && rootArticle.state !== 'published' ) {
+              rootArticle.updateAttributes({
+                state: 'published'
+              })
+              .success(function() {
+                req.flash('alert', 'Category has been re-activated, category root article has been published');
+                req.flash('alert_type', 'info');
+                res.redirect('/admin/categories/' + category.id);
+              });
+            } else {
+              req.flash('alert', 'Category has been re-activated, but category root article was already published');
+              req.flash('alert_type', 'info');
+              res.redirect('/admin/categories/' + category.id);
+            }
+          }
         });
       });
     }
