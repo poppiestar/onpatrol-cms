@@ -10,6 +10,11 @@ block content
     li: a(href='/admin/categories/'+category.id+'/edit') Edit
     li
       form(action='/admin/categories/'+category.id, method='post')
+        input(type='hidden', name='_method', value='PUT')
+        input(type='hidden', name='category[visible]', value=(category.visible ? 'false' : 'true'))
+        button.btn.btn-primary.btn-xs= (category.visible ? 'Hide' : 'Show')
+    li
+      form(action='/admin/categories/'+category.id, method='post')
         input(type='hidden', name='_method', value='DELETE')
         button.btn.btn-danger.btn-xs Delete
 
