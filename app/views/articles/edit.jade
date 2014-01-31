@@ -38,7 +38,7 @@ block content
     .form-group(class=errors.state ? 'has-error' : null)
       label.control-label State
       select.form-control(name='article[state]')
-        each state in ['draft', 'published', 'withdrawn']
+        each state in article.getStates()
           option(value=state, selected=(article.state==state))= state
        if errors.state
          p.help-block=errors.state

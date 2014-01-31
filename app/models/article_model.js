@@ -1,6 +1,8 @@
 module.exports = function(sequelize, DataTypes) {
 
   var ArticleStates = ['draft', 'published', 'withdrawn'];
+  var NewArticleStates = ['draft', 'published'];
+  var PublishedArticleStates = ['published', 'withdrawn'];
 
   var Article = sequelize.define('Article', {
     title: {
@@ -25,6 +27,13 @@ module.exports = function(sequelize, DataTypes) {
     instanceMethods: {
       getTitle: function() {
         return ( this.title === 'root' ? '' : '/' + this.title );
+      },
+      getStates: function() {
+        if( this.state === 'draft' ) {
+          return NewArticleStates;
+        } else {
+          return PublishedArticleStates;
+        }
       }
     }
   });
