@@ -4,6 +4,7 @@ block content
   h1 Category: #{category.name}
 
   p Active: #{category.active ? 'Yes' : 'No'}
+  p Visible in Nav: #{category.visible ? 'Yes' : 'No'}
 
   ul.list-inline
     li: a(href='/admin/categories/'+category.id+'/edit') Edit
