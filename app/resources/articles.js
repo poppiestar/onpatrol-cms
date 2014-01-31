@@ -202,7 +202,7 @@ exports.update = function(req, res) {
           res.redirect('/admin/articles/' + article.id);
         } else {
           // check if title is no longer root or if no longer published
-          if( article.title !== 'root' || article.state != 'published' ) {
+          if( article.title !== 'root' || article.state !== 'published' ) {
             // article is no longer category root article, set category inactive
             if( !article.category.active ) {
               // category is already inactive, don't bother setting it inactive
@@ -217,6 +217,8 @@ exports.update = function(req, res) {
                 res.redirect('/admin/articles/' + article.id);
               });
             }
+          } else {
+            res.redirect('/admin/articles/' + article.id);
           }
         }
       });
