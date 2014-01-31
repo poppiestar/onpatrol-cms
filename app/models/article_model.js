@@ -1,4 +1,7 @@
 module.exports = function(sequelize, DataTypes) {
+
+  var ArticleStates = ['draft', 'published', 'withdrawn'];
+
   var Article = sequelize.define('Article', {
     title: {
       type: DataTypes.STRING,
@@ -13,7 +16,10 @@ module.exports = function(sequelize, DataTypes) {
     state: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'draft'
+      defaultValue: 'draft',
+      validate: {
+        isIn: [ArticleStates]
+      }
     }
   }, {
     instanceMethods: {

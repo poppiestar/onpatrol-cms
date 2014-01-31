@@ -91,10 +91,9 @@ exports.create = function(req, res) {
       article.save()
       .error(function(errors) {
         // error saving article, redirect back to edit page with danger alert
-        req.flash('alert', {
-          type: 'danger',
-          text: 'There was a problem saving your article'
-        });
+        req.flash('alert', 'There was a problem saving your article');
+        req.flash('alert_type', 'danger');
+        req.session.errors = errors;
         req.session.article = article;
         res.redirect('/admin/articles/new');
       })
