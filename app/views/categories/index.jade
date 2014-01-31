@@ -12,6 +12,7 @@ block content
           th Name
           th Category Articles
           th Active
+          th Visible in Nav
           th Actions
       tbody
         each category in categories
@@ -23,6 +24,8 @@ block content
               ul
                 each article in category.articles
                   li: a(href='/'+category.name + article.getTitle())= article.title
+            td
+              p= category.visible ? 'Yes' : 'No'
             td
               p= category.active ? 'Yes' : 'No'
             td
